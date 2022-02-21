@@ -4,6 +4,7 @@ const router = express.Router();
 import User from "../models/User.mjs";
 import { stringToHash, varifyHash } from "bcrypt-inzi";
 import jwt from "jsonwebtoken";
+import fetchuser from "../middleware/fetchuser.mjs";
 const SECRET = process.env.SECRET || "12345";
 router.post(
   "/createuser",
@@ -81,4 +82,24 @@ router.post(
     }
   }
 );
+router.post("/getuser", fetchuser, (req, res) => {
+  try {
+    const user = User.findOne({ email: req.user.email }, (err, user) => {
+      if (err) {
+        res.status(500).send("error in getting database");
+      } else if (!user) {
+        return res.status(400).send("Please try with other credentials");
+      } else {
+        res.send({
+          name: user.name,
+          email: user.email,
+          _id: user._id,
+        });
+      }
+    });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).send("internel server error");
+  }
+});
 export default router;
