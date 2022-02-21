@@ -19,5 +19,4 @@ const UserSchema = mongoose.model("User", {
     default: Date.now,
   },
 });
-UserSchema.createIndexes();
 export default UserSchema;
