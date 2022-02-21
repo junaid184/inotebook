@@ -50,4 +50,67 @@ router.post(
   }
 );
 
+router.put("/updatenote/:id", fetchuser, (req, res) => {
+  const { title, description, tag } = req.body;
+
+  const newNote = {};
+  if (title) {
+    newNote.title = title;
+  }
+  if (description) {
+    newNote.description = description;
+  }
+  if (tag) {
+    newNote.tag = tag;
+  }
+  try {
+    Notes.findById(req.params.id, (err, note) => {
+      if (!note) {
+        return res.status(404).send("Not Found");
+      } else if (err) {
+        res.status(500).send("error in getting database");
+      } else if (note.email != req.user.email) {
+        return res.status(401).send("Not Allowed");
+      } else {
+        Notes.findByIdAndUpdate(
+          req.params.id,
+          { $set: newNote },
+          { new: true },
+          (err, note) => {
+            if (err) {
+              res.status(500).send("error in getting database");
+            } else if (!note) {
+              return res.status(400).send("Please try with other credentials");
+            } else {
+              res.send(note);
+            }
+          }
+        );
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("internel server error");
+  }
+});
+
+router.delete("/deletenote/:id", fetchuser, (req, res) => {
+  try {
+    Notes.findById(req.params.id, async (err, note) => {
+      if (!note) {
+        return res.status(404).send("Not Found");
+      } else if (err) {
+        res.status(500).send("error in getting database");
+      } else if (note.email != req.user.email) {
+        return res.status(401).send("Not Allowed");
+      } else {
+        let note = await Notes.findByIdAndDelete(req.params.id);
+        res.send("note deleted");
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("internel server error");
+  }
+});
 export default router;
