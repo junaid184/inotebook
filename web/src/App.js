@@ -7,15 +7,13 @@ import About from "./components/About";
 function App() {
   return (
     <>
-      {/* <NoteState> */}
-
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="about" element={<About />} />
-      </Routes>
-
-      {/* </NoteState> */}
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="about" element={<About />} />
+        </Routes>
+      </div>
     </>
   );
 }
