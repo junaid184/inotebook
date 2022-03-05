@@ -2,10 +2,11 @@ import express from "express";
 import connectToMongo from "./database.mjs";
 import auth from "./routes/auth.mjs";
 import notes from "./routes/notes.mjs";
+import cors from "cors";
 const app = express();
 const port = 8000;
 connectToMongo();
-
+app.use(cors());
 app.use(express.json());
 
 // Available Routes

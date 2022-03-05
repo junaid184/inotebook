@@ -19,6 +19,7 @@ router.post(
         if (emailExist) {
           return res.status(400).send("Sorry this email is already exists");
         } else if (error) {
+          console.log(error)
           res.status(500).send("error in getting database");
         } else {
           stringToHash(req.body.password)

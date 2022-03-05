@@ -1,11 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import NotesContext from "../context/notes/noteContext";
 import { Typography } from "@mui/material";
 import NoteItem from "./NoteItem";
 import AddANote from "./AddANote";
 const Notes = () => {
   const context = useContext(NotesContext);
-  const { notes } = context;
+  const { notes, getNotes } = context;
+  useEffect(() => {
+    getNotes();
+  }, []);
+
   return (
     <div>
       <AddANote />
